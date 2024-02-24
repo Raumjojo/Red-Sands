@@ -31,6 +31,10 @@ public class TileManager {
             //additionally water, more or less
             tiles[2] = new Tile();
             tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/waterWaves01.png")));
+
+            //added cactus01
+            tiles[3] = new Tile();
+            tiles[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/cactus01.png")));
         }catch (IOException e){
             e.printStackTrace();
         }
