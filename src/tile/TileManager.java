@@ -4,6 +4,7 @@ import main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,42 +14,40 @@ import java.util.Objects;
 public class TileManager {
     GamePanel gamePanel;
     Tile[] tiles;
-    int mapTileNumber[][];
+    int[][] mapTileNumber;
     public TileManager(GamePanel gamePanel){
         this.gamePanel = gamePanel;
         tiles = new Tile[10];
         mapTileNumber = new int[gamePanel.getMaxScreenCol()][gamePanel.getMaxScreenCol()];
         getTileImage();
-        loadMap();
+        loadMap("map01");
     }
     public void getTileImage(){
+        String[] tileNames = {"redSand01","redSand02","waterWaves01","cactus01"};
+        int i = 0;
+        //for every tile in tileNames, put according image in tiles[], in ascending order of position in tileNames
         try{
-            tiles[0] = new Tile();
-            tiles[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/redSand01.png")));
-            tiles[1] = new Tile();
-            tiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/redSand02.png")));
-
-            //additionally water, more or less
-            tiles[2] = new Tile();
-            tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/waterWaves01.png")));
-
-            //added cactus01
-            tiles[3] = new Tile();
-            tiles[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/cactus01.png")));
+            for (String tileName : tileNames){
+                String tilePath = "/tiles/"+tileName+".png";
+                BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(tilePath)));
+                tiles[i] = new Tile().setImage(image);
+                i++;
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
     }
-    public void loadMap(){
-
+    public void loadMap(String mapName){
+        String mapPath = "/maps/"+mapName+".txt";
         try {
-            InputStream inputStream = getClass().getResourceAsStream("/maps/map01.txt");
+            InputStream inputStream = getClass().getResourceAsStream(mapPath);
+            assert inputStream != null;
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
             for (int iRow=0; iRow < gamePanel.getMaxScreenRow(); iRow++){
                 String line = bufferedReader.readLine();
                 for (int iCol=0; iCol < gamePanel.getMaxScreenCol(); iCol++) {
-                    String numbers[] = line.split(" ");
+                    String[] numbers = line.split(" ");
 
                     int num = Integer.parseInt(numbers[iCol]);
 
@@ -58,7 +57,7 @@ public class TileManager {
             bufferedReader.close();
 
         }catch(Exception e){
-
+            e.printStackTrace();
         }
 
     }
