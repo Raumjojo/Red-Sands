@@ -18,12 +18,12 @@ public class TileManager {
     public TileManager(GamePanel gamePanel){
         this.gamePanel = gamePanel;
         tiles = new Tile[10];
-        mapTileNumber = new int[gamePanel.getMaxScreenCol()][gamePanel.getMaxScreenCol()];
+        mapTileNumber = new int[gamePanel.getMaxScreenCol()][gamePanel.getMaxScreenRow()];
         getTileImage();
-        loadMap("map01");
+        loadMap("map02");
     }
     public void getTileImage(){
-        String[] tileNames = {"redSand01","redSand02","waterWaves01","cactus01"};
+        String[] tileNames = {"background","redSand01","redSand02","waterWaves01","cactus01"};
         int i = 0;
         //for every tile in tileNames, put according image in tiles[], in ascending order of position in tileNames
         try{
