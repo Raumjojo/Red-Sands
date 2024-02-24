@@ -1,3 +1,9 @@
+package main;
+
+import entity.Player;
+import main.KeyHandler;
+import tile.TileManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,8 +20,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     //FPS
     int FPS =60;
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
+    Player player = new Player(this,keyHandler);
+    TileManager tileManager = new TileManager(this);
 
     //set Player´s default position
     int playerX = 100;
@@ -25,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true); //improves rendering performance
-        this.addKeyListener(keyH);
+        this.addKeyListener(keyHandler);
         this.setFocusable(true);
     }
 
@@ -33,37 +41,39 @@ public class GamePanel extends JPanel implements Runnable{
     gameThread = new Thread(this);
     gameThread.start();
     }
+    /*
     @Override
-//    public void run() {
-//        while(gameThread != null){
-//
-//            double drawInterval = 1000000000/FPS; //0.01666 s
-//            double nextDrawTime = System.nanoTime() +drawInterval;
-//
-//            update();
-//
-//            repaint();
-//
-//            try {
-//                double remainingTime = nextDrawTime - System.nanoTime();
-//                remainingTime = remainingTime/1000000; // converting nanos into millis;
-//
-//                if(remainingTime<0){
-//                    remainingTime =0;
-//                }
-//
-//                Thread.sleep((long)remainingTime);
-//
-//                nextDrawTime +=drawInterval; // idk if this is needed but he used it in his video
-//
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
+    public void run() {
+        while(gameThread != null){
+
+            double drawInterval = 1000000000/FPS; //0.01666 s
+            double nextDrawTime = System.nanoTime() +drawInterval;
+
+            update();
+
+            repaint();
+
+            try {
+                double remainingTime = nextDrawTime - System.nanoTime();
+                remainingTime = remainingTime/1000000; // converting nanos into millis;
+
+                if(remainingTime<0){
+                    remainingTime =0;
+                }
+
+                Thread.sleep((long)remainingTime);
+
+                nextDrawTime +=drawInterval; // idk if this is needed, but he used it in his video
+
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    */
     public void run() {
 
-        double drawInterval = 1000000000/FPS;
+        double drawInterval = (double) 1000000000 /FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -94,26 +104,26 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update(){
-
-        if (keyH.upPressed == true){
-            playerY -= playerSpeed;
-        } else if (keyH.downPressed) {
-            playerY +=playerSpeed;
-        } else if (keyH.rightPressed) {
-            playerX -=playerSpeed;
-        } else if (keyH.leftPressed) {
-            playerX +=playerSpeed;
-        }
+        player.update();
     }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(Color.white);
-
-        g2.fillRect(playerX,playerY,tileSize,tileSize);
+        tileManager.draw(g2);
+        player.draw(g2);
 
         g2.dispose();
+    }
+    public int getTileSize(){
+        return tileSize;
+    }
+    public int getMaxScreenCol(){
+        return maxScreenCol;
+    }
+    public int getMaxScreenRow(){
+        return maxScreenRow;
     }
 }
