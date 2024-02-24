@@ -66,6 +66,5 @@ public class TileManager {
                 g2.drawImage(tiles[tileNum].image,iCol*tileSize,iRow*tileSize,tileSize,tileSize,null);
             }
         }
-
     }
 }
