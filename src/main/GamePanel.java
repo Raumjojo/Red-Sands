@@ -21,6 +21,7 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS =60;
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
+    CollisionChecker collisionChecker = new CollisionChecker(this);
     Player player = new Player(this,keyHandler);
     TileManager tileManager = new TileManager(this);
 
@@ -121,4 +122,5 @@ public class GamePanel extends JPanel implements Runnable{
     public int getMaxScreenRow(){
         return maxScreenRow;
     }
+    public CollisionChecker getCollisionChecker(){return collisionChecker;}
 }

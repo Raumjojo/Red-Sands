@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class TileManager {
@@ -24,6 +25,7 @@ public class TileManager {
     }
     public void getTileImage(){
         String[] tileNames = {"background","redSand01","redSand02","waterWaves01","cactus01"};
+        String[] collisionTileNames = {"cactus01"};  // tiles that can be collided with, here with cactus
         int i = 0;
         //for every tile in tileNames, put according image in tiles[], in ascending order of position in tileNames
         try{
@@ -31,8 +33,16 @@ public class TileManager {
                 String tilePath = "/tiles/"+tileName+".png";
                 BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(tilePath)));
                 tiles[i] = new Tile().setImage(image);
+
+                boolean tileInCollisionTileNames = Arrays.stream(collisionTileNames).anyMatch(tileName::contains); //interprets the array as a stream of strings, which looks if tileName is in any way contained
+                if(tileInCollisionTileNames) //if the tile is indeed contained, its collision gets activated
+                {
+                    tiles[i].collision = true;
+                }
+
                 i++;
             }
+
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -70,4 +80,8 @@ public class TileManager {
             }
         }
     }
+
+    public int[][] getMapTileNumber() {return mapTileNumber;}
+
+    public Tile[] getTiles() {return tiles;}
 }

@@ -14,6 +14,9 @@ public class Player extends Entity{
     public Player(GamePanel gamePanel, KeyHandler keyHandler){
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+
+        solidArea = new Rectangle(2,0, gamePanel.getTileSize()-4,gamePanel.getTileSize()); //collisionBox of the Player
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -35,18 +38,29 @@ public class Player extends Entity{
         if(!(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed))return;
 
         if (keyHandler.upPressed){
-            y -= speed;
             direction = "up";
         } if (keyHandler.downPressed) {
-            y += speed;
             direction = "down";
         } if (keyHandler.rightPressed) {
-            x -= speed;
             direction = "right";
         } if (keyHandler.leftPressed) {
-            x += speed;
             direction = "left";
         }
+
+        // CHECK TILE COLLSION
+        collisionOn = false;
+        gamePanel.getCollisionChecker().checkTile(this);
+
+        //IF COLLISION IS FALSE PLAYER CAN MOVE
+        if(!collisionOn) {
+            switch (direction){
+                case "up": y -= speed; break;
+                case "down": y += speed; break;
+                case "left": x -= speed; break;
+                case "right": x += speed; break;
+            }
+        }
+
         //every [refreshRate] frames that the player is moving, the sprite changes to simulate movement
         spriteCounter++;
         if (spriteCounter == refreshRate){
