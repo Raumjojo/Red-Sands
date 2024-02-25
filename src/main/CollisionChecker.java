@@ -8,7 +8,7 @@ public class CollisionChecker {
         this.gamePanel = gamePanel;
     }
 
-    public void checkTile(Entity entity){
+    public void checkTile(Entity entity, String direction){
         int entityLeftX = entity.x +entity.solidArea.x;
         int entityRightX = entity.x +entity.solidArea.x + entity.solidArea.width;
         int entityTopY = entity.y + entity.solidArea.y;
@@ -20,38 +20,61 @@ public class CollisionChecker {
         int entityBottomRow = entityBottomY/gamePanel.tileSize;
 
         int tileNum1,tileNum2;
+        int newPosition;
+        int tileSize = gamePanel.tileSize;
 
-        switch (entity.direction){
+        switch (direction){
+            //if entity would leave map bounds, set collision to on and return
             case "up":
-                entityTopRow = (entityTopY - entity.speed) /gamePanel.tileSize;
+                newPosition = entityTopY - entity.speed;
+                if (newPosition < 0){
+                    entity.setCollisionYOn(true);
+                    return;
+                }
+                entityTopRow = newPosition /gamePanel.tileSize;
                 tileNum1 = gamePanel.tileManager.getMapTileNumber()[entityLeftCol][entityTopRow];
                 tileNum2 = gamePanel.tileManager.getMapTileNumber()[entityRightCol][entityTopRow];
                 if(gamePanel.tileManager.getTiles()[tileNum1].collision || gamePanel.tileManager.getTiles()[tileNum2].collision){
-                    entity.collisionOn = true;
+                    entity.setCollisionYOn(true);
                 }
                 break;
             case "down":
-                entityBottomRow = (entityBottomY + entity.speed) /gamePanel.tileSize;
+                newPosition = entityBottomY + entity.speed;
+                if (newPosition >= gamePanel.maxScreenRow * tileSize){
+                    entity.setCollisionYOn(true);
+                    return;
+                }
+                entityBottomRow = newPosition /gamePanel.tileSize;
                 tileNum1 = gamePanel.tileManager.getMapTileNumber()[entityLeftCol][entityBottomRow];
                 tileNum2 = gamePanel.tileManager.getMapTileNumber()[entityRightCol][entityBottomRow];
                 if(gamePanel.tileManager.getTiles()[tileNum1].collision || gamePanel.tileManager.getTiles()[tileNum2].collision){
-                    entity.collisionOn = true;
+                    entity.setCollisionYOn(true);
                 }
                 break;
             case "left":
-                entityLeftCol = (entityLeftX - entity.speed) /gamePanel.tileSize;
+                newPosition = entityLeftX - entity.speed;
+                if (newPosition < 0){
+                    entity.setCollisionXOn(true);
+                    return;
+                }
+                entityLeftCol = newPosition /gamePanel.tileSize;
                 tileNum1 = gamePanel.tileManager.getMapTileNumber()[entityLeftCol][entityTopRow];
                 tileNum2 = gamePanel.tileManager.getMapTileNumber()[entityLeftCol][entityBottomRow];
                 if(gamePanel.tileManager.getTiles()[tileNum1].collision || gamePanel.tileManager.getTiles()[tileNum2].collision){
-                    entity.collisionOn = true;
+                    entity.setCollisionXOn(true);
                 }
                 break;
             case "right":
-                entityRightCol = (entityRightX + entity.speed) /gamePanel.tileSize;
+                newPosition = entityRightX + entity.speed;
+                if (newPosition > gamePanel.getMaxScreenCol() * tileSize){
+                    entity.setCollisionXOn(true);
+                    return;
+                }
+                entityRightCol = newPosition /gamePanel.tileSize;
                 tileNum1 = gamePanel.tileManager.getMapTileNumber()[entityRightCol][entityTopRow];
                 tileNum2 = gamePanel.tileManager.getMapTileNumber()[entityRightCol][entityBottomRow];
                 if(gamePanel.tileManager.getTiles()[tileNum1].collision || gamePanel.tileManager.getTiles()[tileNum2].collision){
-                    entity.collisionOn = true;
+                    entity.setCollisionXOn(true);
                 }
                 break;
         }

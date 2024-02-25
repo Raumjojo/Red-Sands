@@ -23,8 +23,11 @@ public class Player extends Entity{
     public void setDefaultValues(){
         x = 100;
         y = 100;
+        xExact = 100;
+        yExact = 100;
         speed = 4;
-        direction = "down";
+        directionX = "neutral";
+        directionY = "down";
         refreshRate = 12;
     }
     public void getPlayerImage(){
@@ -38,28 +41,41 @@ public class Player extends Entity{
         if(!(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed))return;
 
         if (keyHandler.upPressed){
-            direction = "up";
-        } if (keyHandler.downPressed) {
-            direction = "down";
-        } if (keyHandler.rightPressed) {
-            direction = "right";
-        } if (keyHandler.leftPressed) {
-            direction = "left";
-        }
+            directionY = "up";
+        }else if (keyHandler.downPressed) {
+            directionY = "down";
+        } else { directionY = "neutral";}
+        if (keyHandler.rightPressed) {
+            directionX = "right";
+        } else if (keyHandler.leftPressed) {
+            directionX = "left";
+        } else{ directionX = "neutral";}
 
         // CHECK TILE COLLSION
-        collisionOn = false;
-        gamePanel.getCollisionChecker().checkTile(this);
+        this.setCollisionXOn(false);
+        gamePanel.getCollisionChecker().checkTile(this, directionX);
+        this.setCollisionYOn(false);
+        gamePanel.getCollisionChecker().checkTile(this,directionY);
 
-        //IF COLLISION IS FALSE PLAYER CAN MOVE
-        if(!collisionOn) {
-            switch (direction){
-                case "up": y -= speed; break;
-                case "down": y += speed; break;
-                case "left": x -= speed; break;
-                case "right": x += speed; break;
+        double speedExact = speed;
+        if (!directionX.equals("neutral") && !directionY.equals("neutral")){ //so player wants to move vertically
+            if (!collisionYOn || !collisionXOn) { //so player actually can move vertically
+                speedExact = speedExact / Math.sqrt(2);
             }
         }
+        //IF COLLISION IS FALSE PLAYER CAN MOVE
+        if(!collisionYOn) {
+            if (directionY.equals("up")) { yExact -= speedExact; }
+            else if (directionY.equals("down")) { yExact += speedExact; }
+        }
+        if(!collisionXOn){
+            if (directionX.equals("left")) { xExact -= speedExact; }
+            else if (directionX.equals("right")) { xExact += speedExact; }
+        }
+
+        //cast position as int, still saving the exact location
+        x = (int) xExact;
+        y = (int) yExact;
 
         //every [refreshRate] frames that the player is moving, the sprite changes to simulate movement
         spriteCounter++;
@@ -72,7 +88,7 @@ public class Player extends Entity{
         //g2.setColor(Color.white);
         //g2.fillRect(x,y,gamePanel.getTileSize(),gamePanel.getTileSize());
         BufferedImage image = down1;
-        switch(direction){
+        switch(directionX){
             case "up":
                 if (spriteNum == 1){
                     //image = up1;
@@ -80,6 +96,7 @@ public class Player extends Entity{
                 }
                 //image = up2;
                 break;
+
         }
         g2.drawImage(image, x, y, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
     }
