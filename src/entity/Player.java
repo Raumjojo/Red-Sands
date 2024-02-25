@@ -15,7 +15,7 @@ public class Player extends Entity{
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
-        solidArea = new Rectangle(2,0, gamePanel.getTileSize()-4,gamePanel.getTileSize()); //collisionBox of the Player
+        solidArea = new Rectangle(9,0, gamePanel.getTileSize()-18,gamePanel.getTileSize()); //collisionBox of the Player
 
         setDefaultValues();
         getPlayerImage();
