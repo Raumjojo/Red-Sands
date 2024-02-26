@@ -26,7 +26,8 @@ public class CollisionChecker {
         switch (direction){
             //if entity would leave map bounds, set collision to on and return
             case "up":
-                newPosition = entityTopY - entity.speed;
+                newPosition = entityTopY - entity.speed
+                    -entity.topOffset;//to avoid the head going out of the screen
                 if (newPosition < 0){
                     entity.setCollisionYOn(true);
                     return;
@@ -66,7 +67,7 @@ public class CollisionChecker {
                 break;
             case "right":
                 newPosition = entityRightX + entity.speed;
-                if (newPosition > gamePanel.getMaxScreenCol() * tileSize){
+                if (newPosition >= gamePanel.getMaxScreenCol() * tileSize){
                     entity.setCollisionXOn(true);
                     return;
                 }

@@ -7,12 +7,13 @@ public class Entity {
     public int x, y;
     public double xExact, yExact;
     public int speed;
-    public BufferedImage down1;
+    public BufferedImage neutral, down1, down2;
     public String directionX;
     public String directionY;
     public int spriteCounter = 0;
     public int spriteNum = 1;
     public int refreshRate;
+    public int topOffset;
     public Rectangle solidArea;
     public boolean collisionXOn = false;
     public boolean collisionYOn = false;
