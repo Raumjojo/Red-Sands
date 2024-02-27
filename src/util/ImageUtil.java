@@ -10,7 +10,7 @@ public class ImageUtil {
     public static BufferedImage getImage(String path, Object callingClass){
         BufferedImage image;
         try{
-            image = ImageIO.read(Objects.requireNonNull(callingClass.getClass().getResourceAsStream("/player/playerFront01.png")));
+            image = ImageIO.read(Objects.requireNonNull(callingClass.getClass().getResourceAsStream(path)));
             return image;
         }catch (IOException e){
             e.printStackTrace();

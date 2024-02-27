@@ -28,7 +28,7 @@ public class Player extends Entity{
         topOffset = 6;
         directionX = "neutral";
         directionY = "down";
-        refreshRate = 12;
+        refreshRate = 15;
     }
     public void getPlayerImage(){
         neutral = ImageUtil.getImage("/player/playerFront1.png", this);
@@ -109,10 +109,10 @@ public class Player extends Entity{
         if (directionY.equals("down")){ //fuck knows why tf this doesn't work
             if (spriteNum == 1){
                 image = down1;
-                //System.out.println("image 1");
+                System.out.println("image 1");
             } else {
                 image = down2;
-                //System.out.println("image 2");
+                System.out.println("image 2");
             }
         }
         g2.drawImage(image, x, y, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
