@@ -109,10 +109,8 @@ public class Player extends Entity{
         if (directionY.equals("down")){ //fuck knows why tf this doesn't work
             if (spriteNum == 1){
                 image = down1;
-                System.out.println("image 1");
             } else {
                 image = down2;
-                System.out.println("image 2");
             }
         }
         g2.drawImage(image, x, y, gamePanel.getTileSize(), gamePanel.getTileSize(), null);

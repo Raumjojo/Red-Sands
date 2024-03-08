@@ -1,10 +1,12 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -22,8 +24,10 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
     CollisionChecker collisionChecker = new CollisionChecker(this);
+    AssetSetter assetSetter = new AssetSetter(this);
     Player player = new Player(this,keyHandler);
     TileManager tileManager = new TileManager(this);
+    public ArrayList<SuperObject> objects = new ArrayList<>(); //video used array, but I don't like the static length here
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
@@ -32,41 +36,14 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
     }
+    public void setupGame(){
+        assetSetter.setObject();
+    }
 
     public void startGameThread(){
     gameThread = new Thread(this);
     gameThread.start();
     }
-    /*
-    @Override
-    public void run() {
-        while(gameThread != null){
-
-            double drawInterval = 1000000000/FPS; //0.01666 s
-            double nextDrawTime = System.nanoTime() + drawInterval;
-
-            update();
-
-            repaint();
-
-            try {
-                double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime = remainingTime/1000000; // converting nanos into millis;
-
-                if(remainingTime<0){
-                    remainingTime =0;
-                }
-
-                Thread.sleep((long)remainingTime);
-
-                nextDrawTime +=drawInterval; // idk if this is needed, but he used it in his video
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    */
     public void run() {
 
         double drawInterval = (double) 1000000000 /FPS;
@@ -109,6 +86,9 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D) g;
 
         tileManager.draw(g2);
+
+        assetSetter.draw(g2);
+
         player.draw(g2);
 
         g2.dispose();

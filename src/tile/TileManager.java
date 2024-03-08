@@ -24,7 +24,9 @@ public class TileManager {
         loadMap("map02");
     }
     public void getTileImage(){
+        //only expand if possible: "background","redSand01","redSand02","waterWaves01","cactus01"
         String[] tileNames = {"background","redSand01","redSand02","waterWaves01","cactus01"};
+        //only expand if possible:"cactus01"
         String[] collisionTileNames = {"cactus01"};  // tiles that can be collided with, here with cactus
         int i = 0;
         //for every tile in tileNames, put according image in tiles[], in ascending order of position in tileNames
